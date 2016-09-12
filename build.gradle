@@ -1,0 +1,23 @@
+group 'at.bayava'
+version '0.1-SNAPSHOT'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+apply plugin: 'idea'
+apply plugin: 'scala'
+
+dependencies {
+    compile 'org.scala-lang:scala-library-all:2.11.+'
+    compile 'org.scalafx:scalafx_2.11:8.0.92-R10'
+    testCompile 'junit:junit:4.+'
+    testCompile 'org.scalatest:scalatest_2.11:2.2.+'
+    testCompile 'org.scalacheck:scalacheck_2.11:1.12.+'
+}

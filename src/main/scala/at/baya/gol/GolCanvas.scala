@@ -12,12 +12,18 @@ import scalafx.scene.paint.Color
 	*/
 class GolCanvas extends Canvas {
 
+
 	private val CellSize = 10
 	private var cells: Set[(Long, Long)] = Set.empty
 	private val gc = graphicsContext2D
 	gc.fill = Color.DarkGray
-	width = 800
-	height = 600
+
+	//	width = 800
+	//	height = 600
+	def reset() = {
+		cells = Set.empty
+		gc.clearRect(0, 0, width.value, height.value)
+	}
 
 	private val clickEventHandler = new EventHandler[MouseEvent] {
 		override def handle(event: MouseEvent): Unit = {

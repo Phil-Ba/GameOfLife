@@ -19,17 +19,18 @@ object GolController extends JFXApp {
 
 	stage = new PrimaryStage {
 		title = "Game of Life"
-		val cellCanvas = new GolCanvas
 		width = 800
 		height = 600
 		resizable = false
+
+		val cellCanvas = new GolCanvas
+
 		val timeline = new Timeline {
 			cycleCount = Timeline.Indefinite
 			keyFrames = KeyFrame(Duration(100), onFinished = (e: ActionEvent) => {
 				cellCanvas.plotCell(Random.nextInt(80), Random.nextInt(60))
 			})
 		}
-
 
 		scene = new Scene {
 			fill = Black

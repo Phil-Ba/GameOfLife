@@ -18,8 +18,8 @@ class GolCanvas extends Canvas {
 	private val gc = graphicsContext2D
 	gc.fill = Color.DarkGray
 
-	//	width = 800
-	//	height = 600
+	width = 800
+	height = 600
 	def reset() = {
 		cells = Set.empty
 		gc.clearRect(0, 0, width.value, height.value)

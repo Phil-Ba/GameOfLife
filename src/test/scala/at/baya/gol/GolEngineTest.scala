@@ -2,9 +2,9 @@ package at.baya.gol
 
 import org.junit.runner.RunWith
 import org.scalacheck.Gen
-import org.scalatest.FunSpec
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.prop.PropertyChecks
+import org.scalatest.{FunSpec, Matchers}
 
 import scala.math._
 import scala.util.Random
@@ -13,7 +13,7 @@ import scala.util.Random
 	* Created by philba on 9/22/16.
 	*/
 @RunWith(classOf[JUnitRunner])
-class GolEngineTest extends FunSpec with PropertyChecks {
+class GolEngineTest extends FunSpec with PropertyChecks with Matchers {
 
 	val cut = new GolEngine
 
@@ -166,6 +166,17 @@ class GolEngineTest extends FunSpec with PropertyChecks {
 					}
 				}
 
+			}
+		}
+
+		describe("The method neighbours") {
+			it("should return the neighbours of a cell") {
+				val neighbours = cut.neighbours((50, 50))
+				neighbours should contain only(
+					(49, 49), (49, 50), (49, 51),
+					(50, 49), (50, 50), (50, 51),
+					(51, 49), (51, 50), (51, 51)
+					)
 			}
 		}
 

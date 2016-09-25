@@ -7,6 +7,7 @@ import org.scalatest.junit.JUnitRunner
 import org.scalatest.prop.PropertyChecks
 
 import scala.math._
+import scala.util.Random
 
 /**
 	* Created by philba on 9/22/16.
@@ -15,6 +16,22 @@ import scala.math._
 class GolEngineTest extends FunSpec with PropertyChecks {
 
 	val cut = new GolEngine
+
+	val neighbourOffsetGen = for {
+		xOffset <- Gen.oneOf(-1, 0, 1)
+		yOffset <- Gen.oneOf(-1, 0, 1)
+		if xOffset != 0 || yOffset != 0
+	} yield {
+		(xOffset, yOffset)
+	}
+
+	val nonNeighbourOffsetGen = for {
+		xOffset <- Gen.choose(-100, 100)
+		yOffset <- Gen.choose(-100, 100)
+		if abs(xOffset) > 1 || abs(yOffset) > 1
+	} yield {
+		(xOffset, yOffset)
+	}
 
 	describe("For the method areNeighbours") {
 		describe("two points") {
@@ -72,13 +89,7 @@ class GolEngineTest extends FunSpec with PropertyChecks {
 
 			describe("invalid points") {
 				it("should return false") {
-					val nonNeighbourOffsetGen = for {
-						xOffset <- Gen.choose(-100, 100)
-						yOffset <- Gen.choose(-100, 100)
-						if abs(xOffset) > 1 || abs(yOffset) > 1
-					} yield {
-						(xOffset, yOffset)
-					}
+
 					val nonNeighbourGen = pointGen(nonNeighbourOffsetGen)
 
 					forAll(nonNeighbourGen) {
@@ -92,13 +103,7 @@ class GolEngineTest extends FunSpec with PropertyChecks {
 
 			describe("valid points") {
 				it("should return true") {
-					val neighbourOffsetGen = for {
-						xOffset <- Gen.oneOf(-1, 0, 1)
-						yOffset <- Gen.oneOf(-1, 0, 1)
-						if xOffset != 0 || yOffset != 0
-					} yield {
-						(xOffset, yOffset)
-					}
+
 					val neighbourGen = pointGen(neighbourOffsetGen)
 
 					forAll(neighbourGen) {
@@ -121,12 +126,6 @@ class GolEngineTest extends FunSpec with PropertyChecks {
 			}
 
 			it("should return 3 neighbours") {
-				println(pointList(50, 51, 49, 51, 51, 51, 52, 52, 48, 48, 48, 50, 52,
-					49))
-				println(pointList(50, 51, 49, 51, 51, 51, 52, 52, 48, 48, 48, 50, 52,
-					49).mkString)
-				println(pointList(50, 51, 49, 51, 51, 51, 52, 52, 48, 48, 48, 50, 52,
-					49).size)
 				val result = cut.numberOfNeighbours((50, 50), pointList(50, 51, 49, 51, 51, 51, 52, 52, 48, 48, 48, 50, 52,
 					49))
 				assert(result == 3)
@@ -138,6 +137,36 @@ class GolEngineTest extends FunSpec with PropertyChecks {
 				assert(result == 0)
 			}
 
+			describe("for all points") {
+				val pointsGen = for {
+					startingPoint <- Gen.listOfN[Long](2, Gen.choose(1L, 500L)).collect({ case List(a, b) => (a, b) })
+					neighbours <- Gen.choose(0, 100)
+					nonNeighbours <- Gen.choose(0, 100)
+					neighbourOffsets <- Gen.listOfN(neighbours, neighbourOffsetGen)
+					nonNeighbourOffsets <- Gen.listOfN(nonNeighbours, nonNeighbourOffsetGen)
+				} yield {
+					val x = startingPoint._1
+					val y = startingPoint._2
+					var points = List.empty[(Long, Long)]
+					points = points ::: nonNeighbourOffsets.map(tuple => (tuple._1 + x, tuple._2 + y))
+					points = points ::: neighbourOffsets.map(tuple => (tuple._1 + x, tuple._2 + y))
+					points = Random.shuffle(points)
+					(startingPoint, points, neighbours)
+				}
+
+				it("should return the correct amount of neighbours") {
+					forAll(pointsGen, maxDiscarded(10000)) {
+						(testData) => {
+							val startingPoint = testData._1
+							val points = testData._2
+							val neighbours = testData._3
+							val result = cut.numberOfNeighbours(startingPoint, points)
+							assert(result == neighbours)
+						}
+					}
+				}
+
+			}
 		}
 
 	}

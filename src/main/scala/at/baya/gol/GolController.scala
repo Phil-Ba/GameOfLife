@@ -1,6 +1,5 @@
 package at.baya.gol
 
-import scala.util.Random
 import scalafx.Includes._
 import scalafx.animation.{KeyFrame, Timeline}
 import scalafx.application.JFXApp
@@ -24,11 +23,14 @@ object GolController extends JFXApp {
 		resizable = false
 
 		val cellCanvas = new GolCanvas
+		val engine = new GolEngine
 
 		val timeline = new Timeline {
 			cycleCount = Timeline.Indefinite
-			keyFrames = KeyFrame(Duration(100), onFinished = (e: ActionEvent) => {
-				cellCanvas.plotCell(Random.nextInt(80), Random.nextInt(60))
+			keyFrames = KeyFrame(Duration(1000), onFinished = (e: ActionEvent) => {
+				val nextGeneration = engine.nextGeneration(cellCanvas.getCells)
+				cellCanvas.reset()
+				cellCanvas.plotCells(nextGeneration)
 			})
 		}
 

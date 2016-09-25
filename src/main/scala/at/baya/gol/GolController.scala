@@ -4,6 +4,7 @@ import scalafx.Includes._
 import scalafx.animation.{KeyFrame, Timeline}
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
+import scalafx.beans.property.BooleanProperty
 import scalafx.event.ActionEvent
 import scalafx.scene.control.{Button, ToolBar}
 import scalafx.scene.layout.BorderPane
@@ -22,12 +23,15 @@ object GolController extends JFXApp {
 		height = 600
 		resizable = false
 
+		var running = BooleanProperty(false)
 		val cellCanvas = new GolCanvas
 		val engine = new GolEngine
 
+		cellCanvas.drawable <== !running
+
 		val timeline = new Timeline {
 			cycleCount = Timeline.Indefinite
-			keyFrames = KeyFrame(Duration(1000), onFinished = (e: ActionEvent) => {
+			keyFrames = KeyFrame(Duration(300), onFinished = (e: ActionEvent) => {
 				val nextGeneration = engine.nextGeneration(cellCanvas.getCells)
 				cellCanvas.reset()
 				cellCanvas.plotCells(nextGeneration)
@@ -42,19 +46,28 @@ object GolController extends JFXApp {
 
 					val playBtn = new Button {
 						text = "Start"
-						handleEvent(ActionEvent.Any) { (e: ActionEvent) => timeline.play() }
+						disable <== running
+						handleEvent(ActionEvent.Any) { (e: ActionEvent) =>
+							timeline.play()
+							running() = true
+						}
 					}
 
 					val stopBtn = new Button {
 						text = "Stop"
-						handleEvent(ActionEvent.Any) { (e: ActionEvent) => timeline.stop() }
+						disable <== !running
+						handleEvent(ActionEvent.Any) { (e: ActionEvent) =>
+							timeline.stop()
+							running() = false
+						}
 					}
 
 					val resetBtn = new Button {
-						text = "reset"
+						text = "Reset"
 						handleEvent(ActionEvent.Any) { (e: ActionEvent) =>
 							timeline.stop()
 							cellCanvas.reset()
+							running() = false
 						}
 					}
 

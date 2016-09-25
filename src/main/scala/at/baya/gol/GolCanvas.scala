@@ -6,6 +6,7 @@ import javafx.scene.input.MouseEvent
 import com.typesafe.scalalogging.StrictLogging
 
 import scalafx.Includes._
+import scalafx.beans.property.BooleanProperty
 import scalafx.scene.canvas.Canvas
 import scalafx.scene.paint.Color
 
@@ -18,6 +19,7 @@ class GolCanvas extends Canvas with StrictLogging {
 	private val CellSize = 10
 	private var cells: Set[(Long, Long)] = Set.empty
 	private val gc = graphicsContext2D
+	val drawable = BooleanProperty(true)
 	gc.fill = Color.DarkGray
 
 	width = 800
@@ -44,9 +46,25 @@ class GolCanvas extends Canvas with StrictLogging {
 		}
 	}
 
-	addEventHandler(MouseEvent.MOUSE_CLICKED, clickEventHandler)
-	addEventHandler(MouseEvent.MOUSE_DRAGGED, clickEventHandler)
+	private def addHandlers() = {
+		addEventHandler(MouseEvent.MOUSE_CLICKED, clickEventHandler)
+		addEventHandler(MouseEvent.MOUSE_DRAGGED, clickEventHandler)
+	}
 
+	private def removeHandlers() = {
+		removeEventHandler(MouseEvent.MOUSE_CLICKED, clickEventHandler)
+		removeEventHandler(MouseEvent.MOUSE_DRAGGED, clickEventHandler)
+	}
+
+	addHandlers()
+
+	drawable.onChange((_, _, newValue) => {
+		if (newValue) {
+			addHandlers()
+		} else {
+			removeHandlers()
+		}
+	})
 
 	def plotCell(x: Long, y: Long): Unit = {
 		gc.fillRect(x * CellSize, y * CellSize, CellSize, CellSize)

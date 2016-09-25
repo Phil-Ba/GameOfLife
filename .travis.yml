@@ -1,0 +1,3 @@
+language: scala
+install: ./gradlew assemble
+script: ./gradlew check

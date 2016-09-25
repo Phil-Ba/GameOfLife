@@ -172,11 +172,11 @@ class GolEngineTest extends FunSpec with PropertyChecks with Matchers {
 		describe("The method neighbours") {
 			it("should return the neighbours of a cell") {
 				val neighbours = cut.neighbours((50, 50))
-				neighbours should contain only(
+				neighbours should contain theSameElementsAs List(
 					(49, 49), (49, 50), (49, 51),
-					(50, 49), (50, 50), (50, 51),
+					(50, 49), (50, 51),
 					(51, 49), (51, 50), (51, 51)
-					)
+				)
 			}
 		}
 

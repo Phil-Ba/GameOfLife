@@ -20,7 +20,7 @@ class GolEngine extends StrictLogging {
 
 		val nextGeneration = possibleCells.filter(point => {
 			val number = numberOfNeighbours(point, currentGeneration)
-			number == 2 || number == 3
+			(currentGeneration.contains(point) && number == 2) || number == 3
 		})
 		logger.debug("nextCells: {}", nextGeneration.mkString)
 		nextGeneration
@@ -32,6 +32,7 @@ class GolEngine extends StrictLogging {
 		for {
 			xOffset <- -1 to 1
 			yOffset <- -1 to 1
+			if xOffset != 0 || yOffset != 0
 		} yield {
 			(x + xOffset, y + yOffset)
 		}
@@ -50,7 +51,6 @@ class GolEngine extends StrictLogging {
 		val y1 = point1._2
 		val x2 = point2._1
 		val y2 = point2._2
-
 
 		abs(x1 - x2) <= 1 && abs(y1 - y2) <= 1
 	}

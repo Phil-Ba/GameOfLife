@@ -6,9 +6,6 @@ task wrapper(type: Wrapper) {
     distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
 repositories {
     mavenLocal()
     mavenCentral()
@@ -16,6 +13,9 @@ repositories {
 
 apply plugin: 'idea'
 apply plugin: 'scala'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     compile 'org.scala-lang:scala-library-all:2.11.+'

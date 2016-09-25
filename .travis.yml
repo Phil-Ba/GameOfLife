@@ -1,4 +1,1 @@
-language: scala
-scala: 2.11.8
-install: ./gradlew assemble
-script: ./gradlew check
+language: java

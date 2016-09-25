@@ -16,6 +16,9 @@ apply plugin: 'scala'
 
 dependencies {
     compile 'org.scala-lang:scala-library-all:2.11.+'
+    compile 'com.typesafe.scala-logging:scala-logging_2.11:3.5.+'
+    compile 'org.apache.logging.log4j:log4j-core:2.6.+'
+    compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.6.+'
     compile 'org.scalafx:scalafx_2.11:8.0.92-R10'
     testCompile 'junit:junit:4.+'
     testCompile 'org.scalatest:scalatest_2.11:2.2.+'

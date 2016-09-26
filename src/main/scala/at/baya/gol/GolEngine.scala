@@ -15,7 +15,9 @@ class GolEngine extends StrictLogging {
 	def nextGeneration(currentGeneration: Seq[Point]): Seq[Point] = {
 		logger.debug("currentGeneration: {}", currentGeneration.mkString)
 
-		val possibleCells = currentGeneration.flatMap(neighbours)
+		val possibleCells = currentGeneration
+			.flatMap(neighbours)
+			.toSet
 		logger.debug("possibleCells: {}", possibleCells.mkString)
 
 		val nextGeneration = possibleCells.filter(point => {
@@ -23,7 +25,7 @@ class GolEngine extends StrictLogging {
 			(currentGeneration.contains(point) && number == 2) || number == 3
 		})
 		logger.debug("nextCells: {}", nextGeneration.mkString)
-		nextGeneration
+		nextGeneration.toSeq
 	}
 
 	private[gol] def neighbours(point: Point): Seq[Point] = {

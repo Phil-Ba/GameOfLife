@@ -17,6 +17,14 @@ class GolEngineTest extends FunSpec with PropertyChecks with Matchers {
 
 	val cut = new GolEngine
 
+	def pointList(points: Long*) = {
+		require(points.size % 2 == 0)
+		points
+			.sliding(2, 2)
+			.collect({ case Seq(a, b) => (a, b) })
+			.foldLeft(List.empty[(Long, Long)])((list, current) => current :: list)
+	}
+
 	val neighbourOffsetGen = for {
 		xOffset <- Gen.oneOf(-1, 0, 1)
 		yOffset <- Gen.oneOf(-1, 0, 1)
@@ -117,13 +125,6 @@ class GolEngineTest extends FunSpec with PropertyChecks with Matchers {
 		}
 
 		describe("The method numberOfNeighbours") {
-			def pointList(points: Long*) = {
-				require(points.size % 2 == 0)
-				points
-					.sliding(2, 2)
-					.collect({ case Seq(a, b) => (a, b) })
-					.foldLeft(List.empty[(Long, Long)])((list, current) => current :: list)
-			}
 
 			it("should return 3 neighbours") {
 				val result = cut.numberOfNeighbours((50, 50), pointList(50, 51, 49, 51, 51, 51, 52, 52, 48, 48, 48, 50, 52,
@@ -168,17 +169,55 @@ class GolEngineTest extends FunSpec with PropertyChecks with Matchers {
 
 			}
 		}
+	}
 
-		describe("The method neighbours") {
-			it("should return the neighbours of a cell") {
-				val neighbours = cut.neighbours((50, 50))
-				neighbours should contain theSameElementsAs List(
-					(49, 49), (49, 50), (49, 51),
-					(50, 49), (50, 51),
-					(51, 49), (51, 50), (51, 51)
-				)
+	describe("The method neighbours") {
+		it("should return the neighbours of a cell") {
+			val neighbours = cut.neighbours((50, 50))
+			neighbours should contain theSameElementsAs List(
+				(49, 49), (49, 50), (49, 51),
+				(50, 49), (50, 51),
+				(51, 49), (51, 50), (51, 51)
+			)
+		}
+	}
+
+	describe("The method next generation") {
+		describe("for a blinker") {
+			val blinker = pointList(
+				1, 5,
+				2, 5,
+				3, 5)
+			val blinkerAlternate = pointList(
+				2, 4,
+				2, 5,
+				2, 6)
+			it("should make the blinker alternate between its two forms") {
+				var current: Seq[(Long, Long)] = blinker
+				for (i <- 0 to 100) {
+					current = cut.nextGeneration(current)
+					i % 2 match {
+						case 0 => current should contain theSameElementsAs blinkerAlternate
+						case 1 => current should contain theSameElementsAs blinker
+					}
+				}
 			}
 		}
 
+		describe("for a block") {
+			val block = pointList(
+				1, 1,
+				1, 2,
+				2, 1,
+				2, 2)
+			it("should always return the block") {
+				var current: Seq[(Long, Long)] = block
+				for (i <- 0 to 100) {
+					current = cut.nextGeneration(current)
+					current should contain theSameElementsAs block
+				}
+			}
+		}
 	}
+
 }

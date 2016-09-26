@@ -1,3 +1,8 @@
+plugins {
+    id 'net.saliman.cobertura' version '2.3.1'
+    id 'com.github.kt3k.coveralls' version '2.6.3'
+}
+
 group 'at.bayava'
 version '0.1-SNAPSHOT'
 
@@ -11,11 +16,14 @@ repositories {
     mavenCentral()
 }
 
+cobertura.coverageFormats = ['html', 'xml']
+
 apply plugin: 'idea'
 apply plugin: 'scala'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
+cobertura.coverageSourceDirs = sourceSets.main.scala.srcDirs
 
 dependencies {
     compile 'org.scala-lang:scala-library-all:2.11.+'

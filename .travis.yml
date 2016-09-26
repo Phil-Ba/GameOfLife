@@ -4,5 +4,6 @@ addons:
   apt:
     packages: oracle-java8-installer
 
-install: gradle assemble
-script: gradle check
+install: ./gradlew assemble
+script: ./gradlew check
+after_success: ./gradlew cobertura coveralls

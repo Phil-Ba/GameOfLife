@@ -46,12 +46,12 @@ class GolCanvas extends Canvas with StrictLogging {
 		}
 	}
 
-	private def addHandlers() = {
+	private[gol] def addHandlers() = {
 		addEventHandler(MouseEvent.MOUSE_CLICKED, clickEventHandler)
 		addEventHandler(MouseEvent.MOUSE_DRAGGED, clickEventHandler)
 	}
 
-	private def removeHandlers() = {
+	private[gol] def removeHandlers() = {
 		removeEventHandler(MouseEvent.MOUSE_CLICKED, clickEventHandler)
 		removeEventHandler(MouseEvent.MOUSE_DRAGGED, clickEventHandler)
 	}

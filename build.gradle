@@ -33,5 +33,6 @@ dependencies {
     compile 'org.scalafx:scalafx_2.11:8.0.92-R10'
     testCompile 'junit:junit:4.+'
     testCompile 'org.scalatest:scalatest_2.11:2.2.+'
-    testCompile 'org.scalacheck:scalacheck_2.11:1.12.+'
+    testCompile 'org.scalacheck:scalacheck_2.11:1.13.+'
+    testCompile 'org.scalamock:scalamock-scalatest-support_2.11:3.3.+'
 }

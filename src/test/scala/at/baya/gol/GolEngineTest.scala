@@ -156,7 +156,7 @@ class GolEngineTest extends FunSpec with PropertyChecks with Matchers {
 				}
 
 				it("should return the correct amount of neighbours") {
-					forAll(pointsGen, maxDiscarded(10000)) {
+					forAll(pointsGen, maxDiscardedFactor(50.0)) {
 						(testData) => {
 							val startingPoint = testData._1
 							val points = testData._2

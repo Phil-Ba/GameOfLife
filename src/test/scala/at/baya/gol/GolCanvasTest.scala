@@ -90,6 +90,19 @@ class GolCanvasTest extends FunSpec with MockFactory with Eventually with Matche
 			}
 		}
 
+		describe("After drawing on a canvas") {
+			val cut = fixture.cut
+			cut.plotCells(Seq[(Long, Long)]((23, 45), (78, 902)))
+
+			describe("if you reset the canvas") {
+				cut.reset()
+
+				it("should be empty") {
+					cut.getCells shouldBe empty
+				}
+			}
+		}
+
 	}
 
 }

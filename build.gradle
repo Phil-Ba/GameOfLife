@@ -8,7 +8,7 @@ group 'at.bayava'
 version '0.1-SNAPSHOT'
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
+    gradleVersion = '3.1'
     distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }
 
@@ -36,4 +36,5 @@ dependencies {
     testCompile 'org.scalatest:scalatest_2.11:2.2.+'
     testCompile 'org.scalacheck:scalacheck_2.11:1.13.+'
     testCompile 'org.scalamock:scalamock-scalatest-support_2.11:3.3.+'
+    testRuntime 'org.pegdown:pegdown:1.6.0'
 }
